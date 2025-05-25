@@ -40,11 +40,11 @@ export default function Home() {
   }, []);
 
   const handleArtistasClick = () => {
-    router.push('/artistas');
+    router.push('administrador/artistas');
   };
 
   const handleAniadirCdsClick = () => {
-    router.push('/cds/aniadir');
+    router.push('administrador/cds/aniadir');
   };
 
   const handleEliminar = async (id: number) => {

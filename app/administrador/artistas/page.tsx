@@ -40,7 +40,7 @@ export default function Artistas() {
   };
 
   const handleAniadirClick = () => {
-    router.push('/artistas/aniadir');
+    router.push('/administrador/artistas/aniadir');
   };
 
   const handleEliminarClick = async (id: number) => {

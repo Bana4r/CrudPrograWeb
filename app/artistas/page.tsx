@@ -1,13 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 interface Artista {
   id: number;
   nombre: string;   
 }
 
-export default function Artistas() {
+function ArtistasPage() {
   const router = useRouter();
   const [artistas, setArtistas] = useState<Artista[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +37,7 @@ export default function Artistas() {
   }, []);
 
   const handleVolverClick = () => {
-    router.push('/');
+    router.push('/administrador/');
   };
 
   const handleAniadirClick = () => {
@@ -82,7 +83,7 @@ export default function Artistas() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center flex-col">
         <p className="text-xl text-red-500">Error: {error}</p>
         <button 
           onClick={() => {setError(null); fetchArtistas();}}
@@ -154,5 +155,13 @@ export default function Artistas() {
         </table>
       </div>
     </div>
+  );
+}
+
+export default function Artistas() {
+  return (
+    <ProtectedRoute requiredRole="admin">
+      <ArtistasPage />
+    </ProtectedRoute>
   );
 }

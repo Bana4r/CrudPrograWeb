@@ -49,7 +49,7 @@ export async function POST(request) {
 
     // Insertar el nuevo usuario
     const result = await executeQuery(
-      'INSERT INTO usuarios (nombre, `1er_apellido`, `2do_apellido`, usuario, contraseña, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?)',
+      'INSERT INTO usuarios (nombre, `1er_apellido`, `2do_apellido`, usuario, contrasenia, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?)',
       [
         nombre.trim(),
         primerApellido.trim(),

@@ -1,0 +1,24 @@
+version: '3.8'
+#eviten usar volumes en nextjs, ya que se mesclan los archivos de la app y el contenedor
+services:
+  nextjs:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    env_file:
+      - .env 
+
+  mysql:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_dataCRUD:/var/lib/mysql
+
+volumes:
+  mysql_dataCRUD:

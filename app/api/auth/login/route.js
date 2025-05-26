@@ -16,7 +16,7 @@ export async function POST(request) {
     const query = `
       SELECT id, nombre, \`1er_apellido\`, \`2do_apellido\`, usuario, tipo_usuario 
       FROM usuarios 
-      WHERE BINARY usuario = ? AND BINARY contraseña = ?
+      WHERE BINARY usuario = ? AND BINARY contrasenia = ?
     `;
 
     const result = await executeQuery(query, [usuario, contraseña]);

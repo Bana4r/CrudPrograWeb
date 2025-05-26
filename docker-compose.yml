@@ -1,5 +1,5 @@
 version: '3.8'
-#eviten usar volumes en nextjs, ya que se mesclan los archivos de la app y el contenedor
+
 services:
   nextjs:
     build: .
@@ -8,7 +8,7 @@ services:
     depends_on:
       - mysql
     env_file:
-      - .env 
+      - .env
 
   mysql:
     image: mysql:8
@@ -19,6 +19,7 @@ services:
       - "3306:3306"
     volumes:
       - mysql_dataCRUD:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
 volumes:
   mysql_dataCRUD:

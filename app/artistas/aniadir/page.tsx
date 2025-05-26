@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
-export default function AnadirArtista() {
+function AnadirArtistaPage() {
   const [nombre, setNombre] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState("");
@@ -15,13 +16,18 @@ export default function AnadirArtista() {
     setError("");
     
     try {
+      // Validación básica
+      if (!nombre.trim()) {
+        throw new Error("El nombre del artista es obligatorio");
+      }
+
       // Realizar la petición al backend para insertar en la base de datos
       const response = await fetch('/api/artistas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ nombre }),
+        body: JSON.stringify({ nombre: nombre.trim() }),
       });
       
       if (!response.ok) {
@@ -30,11 +36,16 @@ export default function AnadirArtista() {
       }
       
       // Éxito: redirigir a la página de artistas
-      router.push("/artistas");
+      router.push("/administrador/artistas");
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al guardar el artista');
+    } finally {
       setEnviando(false);
     }
+  };
+
+  const handleCancelar = () => {
+    router.push("/administrador/artistas");
   };
 
   return (
@@ -48,7 +59,7 @@ export default function AnadirArtista() {
       )}
       
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">
             Nombre del Artista
           </label>
@@ -58,18 +69,38 @@ export default function AnadirArtista() {
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Ingrese el nombre del artista"
             required
           />
         </div>
         
-        <button
-          type="submit"
-          disabled={enviando}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-        >
-          {enviando ? "Guardando..." : "Guardar Artista"}
-        </button>
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            disabled={enviando}
+            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 disabled:opacity-50"
+          >
+            {enviando ? "Guardando..." : "Guardar Artista"}
+          </button>
+          
+          <button
+            type="button"
+            onClick={handleCancelar}
+            disabled={enviando}
+            className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition duration-200"
+          >
+            Cancelar
+          </button>
+        </div>
       </form>
     </div>
+  );
+}
+
+export default function AnadirArtista() {
+  return (
+    <ProtectedRoute requiredRole="admin">
+      <AnadirArtistaPage />
+    </ProtectedRoute>
   );
 }

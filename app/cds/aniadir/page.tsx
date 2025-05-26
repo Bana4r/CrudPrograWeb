@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 interface Artista {
   id: number;
   nombre: string;
 }
 
-export default function AnadirCD() {
+function AnadirCDPage() {
   const router = useRouter();
   const [titulo, setTitulo] = useState("");
   const [artistaId, setArtistaId] = useState("");
@@ -84,7 +85,7 @@ export default function AnadirCD() {
       }
       
       // Éxito: redirigir a la página principal
-      router.push("/");
+      router.push("/administrador/");
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al guardar el CD');
     } finally {
@@ -93,7 +94,7 @@ export default function AnadirCD() {
   };
 
   const handleCancelar = () => {
-    router.push("/");
+    router.push("/administrador/");
   };
 
   return (
@@ -185,7 +186,7 @@ export default function AnadirCD() {
           <button
             type="submit"
             disabled={enviando}
-            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 disabled:opacity-50"
           >
             {enviando ? "Guardando..." : "Guardar CD"}
           </button>
@@ -201,5 +202,13 @@ export default function AnadirCD() {
         </div>
       </form>
     </div>
+  );
+}
+
+export default function AnadirCD() {
+  return (
+    <ProtectedRoute requiredRole="admin">
+      <AnadirCDPage />
+    </ProtectedRoute>
   );
 }

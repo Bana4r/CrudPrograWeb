@@ -50,7 +50,7 @@ pipeline {
                 script {
                     echo 'Deploying the application using Docker Compose...'
                     // Usamos Docker Compose para levantar los servicios
-                    sh 'docker-compose -f docker-compose.yml up -d --build'
+                    sh 'docker compose -f docker-compose.yml up -d --build'
                 }
             }
         }
